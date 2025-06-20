@@ -436,7 +436,9 @@ impl SettingsBuilder {
         let path = default_path.join("tasks.json");
 
         if !path.exists() {
-            let mut file = OpenOptions::new().write(true).create(true).open(&path)?;
+            let open_options = &mut OpenOptions::new();
+            let open_options = open_options.write(true);
+            let mut file = OpenOptions::create(open_options, true).open(&path)?;
             writeln!(file, "{{}}")?;
         }
 

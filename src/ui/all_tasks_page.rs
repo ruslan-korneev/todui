@@ -186,16 +186,13 @@ impl AllTasksPage {
     pub fn prev_group(&mut self) {
         let groups = self.get_groups();
         self.current_id = None;
-        match &self.current_group {
-            Some(group) => {
-                let idx = groups.iter().position(|g| g == group).unwrap();
-                if idx > 1 {
-                    self.current_group = Some(groups[idx - 1].clone());
-                } else {
-                    self.current_group = None;
-                }
+        if let Some(group) = &self.current_group {
+            let idx = groups.iter().position(|g| g == group).unwrap();
+            if idx > 1 {
+                self.current_group = Some(groups[idx - 1].clone());
+            } else {
+                self.current_group = None;
             }
-            None => {}
         }
         self.app
             .borrow_mut()
