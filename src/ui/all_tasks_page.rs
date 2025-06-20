@@ -74,6 +74,7 @@ impl AllTasksPage {
             .into_iter()
             .cloned()
             .sorted_by(|a, b| a.date.cmp(&b.date))
+            .sorted_by(|a, b| a.complete.cmp(&b.complete))
             .collect()
     }
 
