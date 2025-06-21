@@ -270,6 +270,10 @@ impl AllTasksPage {
         self.app.borrow().settings.icons.get_complete_icon(complete)
     }
 
+    pub fn get_display_group(&self, group: &Option<String>) -> String {
+        group.clone().unwrap_or_else(|| "no group".to_string())
+    }
+
     pub fn get_repeats_icon(&self, repeats: &Repeat) -> String {
         match repeats {
             Repeat::Never => String::from(""),
@@ -372,7 +376,13 @@ impl Page for AllTasksPage {
                 // Create string
                 let complete_icon = self.get_complete_icon(item.complete);
                 let recurring_icon = self.get_repeats_icon(&item.repeats);
-                let title = format!("{} {} {} ", complete_icon, item.name, recurring_icon);
+                let mut title = format!("{complete_icon} {} {recurring_icon}", item.name);
+                if current_group_idx == 0 {
+                    let display_group = self.get_display_group(&item.group);
+                    title.push_str(&format!(" || {display_group} "));
+                } else {
+                    title.push(' ');
+                }
                 let title_style = match (item.complete, self.current_id) {
                     (_, Some(task_id)) if task_id == item.id.unwrap() => Style::default()
                         .fg(self.get_secondary_color())
